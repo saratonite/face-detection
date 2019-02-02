@@ -1,50 +1,40 @@
+import { from, throwError } from "rxjs";
 export default class Camera {
+  constructor() {
+    this.constraints = {
+      audio: true,
+      video: {
+        deviceId: null,
+        width: 500,
+        height: 500
+      }
+    };
+  }
 
+  /**
+   * Get camera devices
+   */
+  getDevices() {
+    return from(window.navigator.mediaDevices.enumerateDevices());
+  }
 
-    constraints = {
-        audio: true,
-        video: {
-            deviceId: null,
-            width: 500,
-            height: 500
-        }
+  /**
+   * Get single camara stream
+   * @param {*} device
+   */
+  getDeviceStream(device) {
+    this.constraints.deviceId = device.deviceId;
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      return from(navigator.mediaDevices.getUserMedia(this.constraints));
     }
 
-    /**
-     * Get camera devices
-     */
-    getDevices() {
-        return window.navigator.mediaDevices.enumerateDevices()
-    }
+    return throwError("Browser not support");
+  }
 
-    /**
-     * Get single camara stream
-     * @param {*} device 
-     */
-    getDeviceStream(device) {
-
-        this.constraints.deviceId = device.deviceId
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            return navigator.mediaDevices.getUserMedia(this.constraints)
-        }
-
-        return new Promise((resolve, reject) => {
-            reject('Browser not support')
-        })
-
-
-
-
-    }
-
-
-    attachVideo(videoEl) {
-
-        this.getDeviceStream(selectedDevice)
-            .then((stream) => {
-                videoEl.srcObject = stream
-                videoEl.play();
-            })
-
-    }
+  //   attachVideo(videoEl) {
+  //     this.getDeviceStream(selectedDevice).then(stream => {
+  //       videoEl.srcObject = stream;
+  //       videoEl.play();
+  //     });
+  //   }
 }

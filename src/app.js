@@ -1,57 +1,43 @@
-import {
-    FaceDetection
-} from './facedetection';
+import { FaceDetection } from "./facedetection";
 
+/** Document content loaded  */
+document.addEventListener("DOMContentLoaded", () => {
+  // Dom button selections
+  const btnStart = document.querySelector("#start");
+  const btnStop = document.querySelector("#stop");
 
+  // Create facedetection object
+  let fd = new FaceDetection();
+  fd.init("video");
 
+  // Attach stop button action
 
-document.addEventListener('DOMContentLoaded', () => {
+  btnStop.addEventListener("click", () => {
+    console.log("Stop", fd);
 
+    fd.stop();
+  });
 
+  // Attach Start button event
 
+  btnStart.addEventListener("click", () => {
+    let detectionCount = 0;
+    const IN_THRESHOLD = 2;
 
-    const btnStart = document.querySelector('#start')
-    const btnStop = document.querySelector('#stop')
+    // Start face detection
+    const detection$ = fd.onDetect().subscribe(event => {
+      console.log("Data", event.data);
+      if (event.data.length) {
+        detectionCount++;
+      } else {
+        detectionCount = detectionCount > 0 ? detectionCount-- : 0;
+      }
 
-
-    let fd = new FaceDetection();
-    fd.init('video');
-
-
-    btnStop.addEventListener('click', () => {
-
-        console.log('Stop', fd)
-
-        fd.stop()
-
-    })
-
-
-
-
-
-    btnStart.addEventListener('click', () => {
-        let detectionCount = 0;
-        const IN_THRESHOLD = 2;
-
-
-        const detection$ = fd.onDetect().subscribe(
-            event => {
-                console.log('Data', event.data);
-                if (event.data.length) {
-
-                    detectionCount++;
-
-                } else {
-                    detectionCount = detectionCount > 0 ? detectionCount-- : 0;
-                }
-
-                if (detectionCount > IN_THRESHOLD) {
-                    console.info('>>> Facedetected ')
-                    detection$.unsubscribe();
-                }
-            }
-        )
-    })
-
-})
+      if (detectionCount > IN_THRESHOLD) {
+        console.info(">>> Facedetected ");
+        // stop face detection
+        detection$.unsubscribe();
+      }
+    });
+  });
+});
