@@ -2,8 +2,12 @@ import "tracking/build/tracking";
 import "tracking/build/data/face-min.js";
 import "tracking/build/data/eye-min.js";
 import "tracking/build/data/mouth-min.js";
+import "./trackingjs.extend";
 
-import { fromEvent } from "rxjs";
+
+import {
+  fromEvent
+} from "rxjs";
 
 export class FaceDetection {
   constructor() {
@@ -42,9 +46,6 @@ export class FaceDetection {
   }
 
   stopCamera() {
-    console.dir(this.trackingTask);
-
-    console.dir(this.faceTracker);
 
     tracking.stopUserMedia();
   }
