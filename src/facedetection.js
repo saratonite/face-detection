@@ -17,18 +17,14 @@ export class FaceDetection {
   }
 
   init(videoElement) {
-    let _videoEl = document.createElement("video");
-    _videoEl.width = 500;
-    _videoEl.height = 500;
-    _videoEl.autoplay = true;
-    _videoEl.muted = true;
+
 
     this.faceTracker = new tracking.ObjectTracker("face");
     this.faceTracker.setInitialScale(4);
     this.faceTracker.setStepSize(2);
     this.faceTracker.setEdgesDensity(0.1);
 
-    this.trackingTask = tracking.track("video", this.faceTracker, {
+    this.trackingTask = tracking.track(videoElement, this.faceTracker, {
       camera: true
     });
   }

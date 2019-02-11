@@ -6,6 +6,8 @@
 
 if (tracking) {
 
+    tracking.localStream = null;
+
 
     /**
      * Captures the user camera when tracking a video element and set its source
@@ -20,7 +22,7 @@ if (tracking) {
             audio: !!(opt_options && opt_options.audio)
         }, function (stream) {
 
-            window.localStream = stream;
+            tracking.localStream = stream;
             try {
                 element.src = window.URL.createObjectURL(stream);
             } catch (err) {
@@ -37,9 +39,9 @@ if (tracking) {
      */
 
     tracking.stopUserMedia = function () {
-        if (window.localStream) {
+        if (tracking.localStream) {
 
-            window.localStream.getVideoTracks()[0].stop();
+            tracking.localStream.getVideoTracks()[0].stop();
         }
 
     }

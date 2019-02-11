@@ -1,4 +1,6 @@
-import { FaceDetection } from "./facedetection";
+import {
+  FaceDetection
+} from "./facedetection";
 
 /** Document content loaded  */
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Create facedetection object
   let fd = new FaceDetection();
-  fd.init("video");
+
+  // Custom video element
+
+  let _videoEl = document.createElement("video");
+  _videoEl.width = 500;
+  _videoEl.height = 500;
+  _videoEl.autoplay = true;
+  _videoEl.muted = true;
+
+  document.body.appendChild(_videoEl)
+
+  fd.init(_videoEl);
 
   // Attach stop button action
 
